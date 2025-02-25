@@ -6,8 +6,8 @@
 
 - 支持三轴力传感器数据采集与发布
 - 提供两种工作模式：
-  - 三轴合并模式：将三个轴的数据合并为一个消息发布
-  - 三轴分离模式：为每个轴单独创建发布者，独立发布数据
+  - ~~三轴合并模式：将三个轴的数据合并为一个消息发布（失败）~~
+  - 三轴分离模式：为每个轴单独创建发布者，独立发布数据（成功）
 - 使用ASCII通信模式与传感器进行串口通信
 - 可靠的数据采集机制和错误处理
 
@@ -54,11 +54,27 @@
 
 ### 运行传感器节点
 
-启动力传感器节点（默认使用分离模式）：
+启动力传感器节点（默认使用分离模式）步骤如下：
+
+新建终端：ctrl+alt+t
 
 ```bash
 ros2 run sensor force_sensor
 ```
+
+### plotjuggler查看/保存数据
+
+建议使用**plotjuggler**进行数据可视化和保存
+
+启动命令（如果已安装plotjuggler）
+
+```bash
+source install/setup.sh
+
+ros2 run plotjuggler plotjuggler
+```
+
+
 
 ### 查看发布的数据
 
@@ -75,7 +91,7 @@ ros2 topic echo /force_sensor_y
 ros2 topic echo /force_sensor_z
 ```
 
-在合并模式下，可以订阅以下话题查看三轴数据：
+~~在合并模式下，可以订阅以下话题查看三轴数据：~~
 
 ```bash
 ros2 topic echo /force_sensor_data
@@ -85,7 +101,7 @@ ros2 topic echo /force_sensor_data
 
 如需修改串口配置或工作模式，请编辑 `sensor/force_sensor_node.py` 文件：
 
-- 要使用合并模式，取消注释 `三轴一起` 部分的代码，并注释掉 `三轴分开` 部分的代码
+- ~~要使用合并模式，取消注释 `三轴一起` 部分的代码，并注释掉 `三轴分开` 部分的代码~~
 - 要修改串口设备名称，修改相应的 `port_name` 参数
 
 ## 传感器通信参数
