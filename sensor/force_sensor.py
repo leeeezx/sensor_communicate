@@ -199,7 +199,7 @@ class SingleAxisPublisher(Node):
                 for data in self.sensor.read_sensor_data():
                     try:
                         msg = Float32()
-                        msg.data = float(data)
+                        msg.data = float(data) * 9.8
                         self.publisher.publish(msg)
                     except ValueError as e:
                         self.get_logger().warn(f'数据转换错误: {e}')
