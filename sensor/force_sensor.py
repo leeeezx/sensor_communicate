@@ -8,6 +8,7 @@ import rclpy
 from rclpy.node import Node
 from std_msgs.msg import Float32MultiArray
 from std_msgs.msg import Float32
+from geometry_msgs.msg import WrenchStamped
 
 # 配置日志
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -190,7 +191,10 @@ class ForceSensorPublisher(Node):
 class SingleAxisPublisher(Node):
     def __init__(self, name, sensor):
         super().__init__(f'force_sensor_{name}_publisher')
-        self.publisher = self.create_publisher(Float32, f'force_sensor_{name}', 10)
+        # self.publisher = self.create_publisher(Float32, f'force_sensor_{name}', 10)
+        self.axis_name = name
+        self.publisher = self.create_publisher(WrenchStamped, f'force_sensor_{name}', 10)
+
         self.sensor = sensor
         
     def read_and_publish(self):
@@ -198,8 +202,11 @@ class SingleAxisPublisher(Node):
             try:
                 for data in self.sensor.read_sensor_data():
                     try:
-                        msg = Float32()
-                        msg.data = float(data) * 9.8
+                        # msg = Float32()
+                        # msg.data = float(data) * 9.8
+                        msg = WrenchStamped()
+                        msg.header.stamp = self.get_clock().now().to_msg()
+                        setattr(msg.wrench.force, self.axis_name, float(data) * 9.8)
                         self.publisher.publish(msg)
                     except ValueError as e:
                         self.get_logger().warn(f'数据转换错误: {e}')
